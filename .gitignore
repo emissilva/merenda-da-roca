@@ -1,0 +1,8 @@
+node_modules/
+__pycache__/
+*.pyc
+fnde_raw/
+ibge_raw/
+~$*
+.DS_Store
+Thumbs.db
