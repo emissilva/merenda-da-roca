@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Merenda da Roça · Painel</title>
+<meta name="description" content="Compras da agricultura familiar no PNAE por prefeitura, 2011–2022 (FNDE/SigPC + IBGE Censo 2022).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" integrity="sha384-bs/nf9FbdNouRbMiFcrcZfLXYPKiPaGVGplVbv7dLGECccEXDW+S3zjqSKR5ZEaD" crossorigin="anonymous"></script>
+<script src="data.js"></script>
+<style>
+:root{--bg:#E0E0E0;--card:#FFFFFF;--soft:#F4F4F4;--ink:#000;--muted:#6E6E6E;--olive:#829B4D;--orange:#F67024;--red:#C5192D;--navy:#092D4C;--line:#D0D0D0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Arial,sans-serif;font-size:14px}
+header{background:#000;color:#fff;padding:28px 16px 22px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 16px}
+header .kick{color:var(--orange);font-weight:600;font-size:12px;letter-spacing:.18em;text-transform:uppercase}
+header h1{font-family:Montserrat,"Century Gothic",sans-serif;font-weight:300;font-size:clamp(26px,4vw,44px);letter-spacing:.06em;margin:8px 0 6px;text-transform:uppercase}
+header p{color:#B5B5B5;margin:0;max-width:760px;line-height:1.5}
+.filters{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
+.filters label{display:flex;flex-direction:column;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;gap:4px}
+select,input[type=search]{font:inherit;padding:8px 14px;border:1px solid #000;border-radius:999px;background:#fff;min-width:150px}
+.seg{display:flex;border:1px solid #000;border-radius:999px;overflow:hidden;height:38px}
+.seg button{font:inherit;border:0;background:#fff;padding:0 16px;cursor:pointer}
+.seg button.on{background:#000;color:#fff}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi{background:var(--card);padding:16px}
+.kpi .v{font-family:Montserrat,"Century Gothic",sans-serif;font-weight:600;font-size:clamp(22px,3vw,32px)}
+.kpi .l{color:var(--muted);font-size:12px;margin-top:4px;line-height:1.4}
+.grid{display:grid;grid-template-columns:1.4fr 1fr;gap:12px;margin-top:12px}
+.panel{background:var(--card);padding:16px;min-width:0}
+.panel h2{font-size:12px;font-weight:600;color:var(--orange);letter-spacing:.1em;text-transform:uppercase;margin:0 0 4px}
+.panel .sub{color:var(--muted);font-size:12px;margin:0 0 10px}
+.chart{position:relative;height:280px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#000;color:#fff;text-align:left;padding:8px;font-weight:600;cursor:pointer;white-space:nowrap}
+td{padding:7px 8px;border-bottom:1px solid #EEE}
+td.n{text-align:right;font-variant-numeric:tabular-nums}
+.tag{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;color:#fff}
+.tablebox{max-height:360px;overflow:auto}
+footer{color:var(--muted);font-size:12px;line-height:1.6;padding:20px 16px 40px}
+footer a{color:var(--navy)}
+@media (max-width:860px){.kpis{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="kick">Global Solution 2026.2 · CitizenTech · Merenda da Roça</div>
+  <h1>Onde a merenda não chega ao campo</h1>
+  <p>Quanto da verba do PNAE cada prefeitura gastou comprando da agricultura familiar. A meta legal era de 30% e passa a <b style="color:#fff">45% em 2026</b> (Lei 15.226/2025).</p>
+</div></header>
+
+<main class="wrap">
+  <div class="filters">
+    <label>Ano<select id="fAno"></select></label>
+    <label>Região<select id="fReg"><option value="">Brasil</option></select></label>
+    <label>UF<select id="fUf"><option value="">Todas</option></select></label>
+    <label>Porte do município<select id="fPorte"><option value="">Todos</option></select></label>
+    <label>Meta usada<div class="seg" id="fMeta"><button data-m="0.30">30% (até 2025)</button><button data-m="0.45" class="on">45% (2026)</button></div></label>
+  </div>
+
+  <section class="kpis">
+    <div class="kpi"><div class="v" id="kAgg">–</div><div class="l">da verba das prefeituras foi para a agricultura familiar</div></div>
+    <div class="kpi"><div class="v" id="kAbaixo" style="color:var(--orange)">–</div><div class="l" id="kAbaixoL">das prefeituras abaixo da meta</div></div>
+    <div class="kpi"><div class="v" id="kGap">–</div><div class="l" id="kGapL">faltariam por ano para todas chegarem à meta</div></div>
+    <div class="kpi"><div class="v" id="kN" style="color:var(--olive)">–</div><div class="l">prefeituras com dados válidos</div></div>
+  </section>
+
+  <section class="grid">
+    <div class="panel"><h2>Evolução</h2><p class="sub">% da verba comprada da agricultura familiar, 2011–2022: seleção × Brasil</p><div class="chart"><canvas id="cLinha"></canvas></div></div>
+    <div class="panel"><h2>Faixas da meta</h2><p class="sub">Quantas prefeituras em cada faixa no ano escolhido</p><div class="chart"><canvas id="cFaixa"></canvas></div></div>
+    <div class="panel"><h2>Onde</h2><p class="sub" id="sUf">% de prefeituras abaixo da meta, por UF</p><div class="chart"><canvas id="cUf"></canvas></div></div>
+    <div class="panel"><h2>Quem</h2><p class="sub">% de prefeituras abaixo da meta, por porte do município</p><div class="chart"><canvas id="cPorte"></canvas></div></div>
+  </section>
+
+  <section class="panel" style="margin-top:12px">
+    <h2>Cada prefeitura</h2>
+    <p class="sub">Procure o seu município. Clique no cabeçalho para ordenar.</p>
+    <input type="search" id="busca" placeholder="Buscar município…" style="margin-bottom:10px;width:min(360px,100%)">
+    <div class="tablebox"><table><thead><tr>
+      <th data-k="3">Município</th><th data-k="1">UF</th><th data-k="p">Porte</th><th data-k="5" class="n">Repasse FNDE</th><th data-k="6" class="n">Comprado da AF</th><th data-k="pc" class="n">% AF</th><th>Situação</th>
+    </tr></thead><tbody id="tb"></tbody></table></div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <b>Fontes:</b> <a href="https://www.gov.br/fnde/pt-br/acesso-a-informacao/acoes-e-programas/programas/pnae/consultas/pnae-dados-da-agricultura-familiar">FNDE – Dados da Agricultura Familiar (SigPC), 2011–2022</a>, dados preliminares;
+  <a href="https://apisidra.ibge.gov.br/values/t/4709/n6/all/v/93/p/2022">IBGE – Censo 2022, população (SIDRA 4709)</a>.
+  Somente prefeituras com dados válidos: excluídos os registros sem repasse ou com compra maior que o repasse. % AF = comprado da agricultura familiar ÷ repasse do FNDE.
+  Base completa e código: <a href="https://github.com/kelvindouglasr/merenda-da-roca">github.com/kelvindouglasr/merenda-da-roca</a>. Equipe Raiz Digital · turma 2TSCPW · FIAP.
+</footer>
+
+<script>
+const D = window.DADOS, L = D.linhas; // [ano, uf, reg, municipio, porte, transferido, comprado]
+const REGN = {N:"Norte",NE:"Nordeste",CO:"Centro-Oeste",SE:"Sudeste",S:"Sul"};
+const C = {olive:"#829B4D",orange:"#F67024",red:"#C5192D",gray:"#9A9A9A",black:"#000",navy:"#092D4C"};
+const st = {ano:2022, reg:"NE", uf:"", porte:"", meta:0.45, sort:"pc", asc:true, q:""};
+const fmtPct = x => isFinite(x) ? (x*100).toFixed(1).replace(".",",")+"%" : "–";
+const fmtBRL = x => x>=1e9 ? "R$ "+(x/1e9).toFixed(2).replace(".",",")+" bi" : x>=1e6 ? "R$ "+(x/1e6).toFixed(1).replace(".",",")+" mi" : "R$ "+Math.round(x/1e3)+" mil";
+const anos = [...new Set(L.map(r=>r[0]))].sort();
+const ufsDe = reg => [...new Set(L.filter(r=>!reg||r[2]===reg).map(r=>r[1]))].sort();
+
+function opt(sel, vals, lab){ vals.forEach(v=>{const o=document.createElement("option");o.value=v;o.textContent=lab?lab(v):v;sel.appendChild(o);}); }
+opt(fAno, anos.slice().reverse()); fAno.value = st.ano;
+opt(fReg, Object.keys(REGN), k=>REGN[k]); fReg.value = st.reg;
+opt(fPorte, D.portes.map((_,i)=>i), i=>D.portes[i]);
+function fillUf(){ fUf.innerHTML='<option value="">Todas</option>'; opt(fUf, ufsDe(st.reg)); fUf.value = st.uf; }
+fillUf();
+
+const filt = (r, o={}) => (o.ano===undefined ? r[0]===st.ano : (o.ano===null || r[0]===o.ano))
+  && (o.noGeo || ((!st.reg || r[2]===st.reg) && (!st.uf || r[1]===st.uf)))
+  && (o.noPorte || st.porte==="" || r[4]===+st.porte);
+function agg(rows){ let t=0,a=0,n=0,b=0,g=0,f=[0,0,0,0];
+  for(const r of rows){ const p=r[6]/r[5]; t+=r[5]; a+=r[6]; n++; if(p<st.meta) b++; g+=Math.max(0, st.meta*r[5]-r[6]);
+    f[p===0?0:p<.30?1:p<.45?2:3]++; }
+  return {pct:a/t, abaixo:b/n, gap:g, n, f}; }
+
+Chart.defaults.font.family = "Inter, Arial, sans-serif"; Chart.defaults.color = "#6E6E6E";
+const pctAxis = max => ({min:0, max, ticks:{callback:v=>v+"%"}, grid:{color:"#EEE"}});
+const cLin = new Chart(cLinha, {type:"line", data:{labels:anos, datasets:[]}, options:{maintainAspectRatio:false, interaction:{mode:"index",intersect:false},
+  scales:{y:pctAxis(60), x:{grid:{display:false}}}, plugins:{legend:{position:"bottom"}, tooltip:{callbacks:{label:c=>c.dataset.label+": "+c.parsed.y.toFixed(1).replace(".",",")+"%"}}}}});
+const cFx = new Chart(cFaixa, {type:"doughnut", data:{labels:["Não comprou (0%)","Abaixo de 30%","30% a 45%","45% ou mais"], datasets:[{data:[], backgroundColor:[C.red,C.orange,C.gray,C.olive], borderWidth:0}]},
+  options:{maintainAspectRatio:false, cutout:"58%", plugins:{legend:{position:"right"}}}});
+const barOpts = (horiz) => ({maintainAspectRatio:false, indexAxis:horiz?"y":"x", plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>(horiz?c.parsed.x:c.parsed.y).toFixed(1).replace(".",",")+"% abaixo da meta"}}},
+  scales: horiz ? {x:pctAxis(100), y:{grid:{display:false}}} : {y:pctAxis(100), x:{grid:{display:false}}}});
+const cU = new Chart(cUf, {type:"bar", data:{labels:[], datasets:[{data:[], backgroundColor:C.orange}]}, options:barOpts(true)});
+const cP = new Chart(cPorte, {type:"bar", data:{labels:[], datasets:[{data:[], backgroundColor:C.olive}]}, options:barOpts(false)});
+
+function render(){
+  const sel = L.filter(r=>filt(r)), k = agg(sel), metaTxt = Math.round(st.meta*100)+"%";
+  kAgg.textContent = fmtPct(k.pct); kAbaixo.textContent = fmtPct(k.abaixo); kGap.textContent = k.n ? fmtBRL(k.gap) : "–";
+  kN.textContent = k.n.toLocaleString("pt-BR"); kAbaixoL.textContent = "das prefeituras abaixo de "+metaTxt;
+  kGapL.textContent = "faltariam no ano para todas chegarem a "+metaTxt;
+  const nome = st.uf || (st.reg ? REGN[st.reg] : "Brasil");
+  const serie = (geo) => anos.map(a=>{ const g=agg(L.filter(r=>filt(r,{ano:a, noGeo:!geo}) && (geo || true))); return +(g.pct*100).toFixed(1); });
+  cLin.data.datasets = [
+    {label:nome, data:serie(true), borderColor:C.orange, backgroundColor:C.orange, tension:.25, borderWidth:2.5, pointRadius:2},
+    ...(nome!=="Brasil" ? [{label:"Brasil", data:serie(false), borderColor:C.gray, backgroundColor:C.gray, tension:.25, borderWidth:2, pointRadius:0}] : []),
+    {label:"Meta 30%", data:anos.map(()=>30), borderColor:C.olive, borderDash:[5,4], pointRadius:0, borderWidth:1.5},
+    {label:"Meta 45% (2026)", data:anos.map(()=>45), borderColor:C.black, borderDash:[2,3], pointRadius:0, borderWidth:1.5}];
+  cLin.update();
+  cFx.data.datasets[0].data = k.f; cFx.update();
+  const ufs = ufsDe(st.reg).map(u=>[u, agg(L.filter(r=>r[0]===st.ano && r[1]===u && (st.porte===""||r[4]===+st.porte))).abaixo*100]).sort((a,b)=>b[1]-a[1]);
+  cU.data.labels = ufs.map(x=>x[0]); cU.data.datasets[0].data = ufs.map(x=>+x[1].toFixed(1));
+  cU.data.datasets[0].backgroundColor = ufs.map(x=>x[0]===st.uf?C.black:C.orange); cU.update();
+  sUf.textContent = "% de prefeituras abaixo de "+metaTxt+", por UF"+(st.reg?" ("+REGN[st.reg]+")":"");
+  const pts = D.portes.map((p,i)=>[p, L.filter(r=>filt(r,{noPorte:true}) && r[4]===i)]).filter(x=>x[1].length>=5);
+  cP.data.labels = pts.map(x=>x[0]); cP.data.datasets[0].data = pts.map(x=>+(agg(x[1]).abaixo*100).toFixed(1)); cP.update();
+  tabela(sel);
+}
+function tabela(sel){
+  const q = st.q.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+  let rows = sel.map(r=>({r, pc:r[6]/r[5], p:r[4]})).filter(x=>!q || x.r[3].normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().includes(q));
+  const key = st.sort;
+  rows.sort((a,b)=>{ const va = key==="pc"?a.pc:key==="p"?a.p:a.r[+key], vb = key==="pc"?b.pc:key==="p"?b.p:b.r[+key];
+    return (va>vb?1:va<vb?-1:0)*(st.asc?1:-1); });
+  tb.innerHTML = rows.slice(0,400).map(x=>{ const ok = x.pc>=st.meta, cor = x.pc===0?C.red:ok?C.olive:C.orange;
+    const txt = x.pc===0?"Não comprou":ok?"Cumpre "+Math.round(st.meta*100)+"%":"Abaixo da meta";
+    return `<tr><td>${x.r[3]}</td><td>${x.r[1]}</td><td>${D.portes[x.p]||"–"}</td><td class="n">${fmtBRL(x.r[5])}</td><td class="n">${fmtBRL(x.r[6])}</td><td class="n">${fmtPct(x.pc)}</td><td><span class="tag" style="background:${cor}">${txt}</span></td></tr>`; }).join("")
+    + (rows.length>400 ? `<tr><td colspan="7" style="color:#6E6E6E">Mostrando 400 de ${rows.length.toLocaleString("pt-BR")}. Use a busca ou os filtros.</td></tr>` : "");
+}
+fAno.onchange = e=>{st.ano=+e.target.value; render();};
+fReg.onchange = e=>{st.reg=e.target.value; st.uf=""; fillUf(); render();};
+fUf.onchange = e=>{st.uf=e.target.value; render();};
+fPorte.onchange = e=>{st.porte=e.target.value; render();};
+fMeta.onclick = e=>{ const b=e.target.closest("button"); if(!b) return; st.meta=+b.dataset.m; [...fMeta.children].forEach(x=>x.classList.toggle("on",x===b)); render(); };
+busca.oninput = e=>{st.q=e.target.value; tabela(L.filter(r=>filt(r)));};
+document.querySelectorAll("th[data-k]").forEach(th=>th.onclick=()=>{ const k=th.dataset.k; st.asc = st.sort===k ? !st.asc : true; st.sort=k; tabela(L.filter(r=>filt(r))); });
+render();
+</script>
+</body>
+</html>
