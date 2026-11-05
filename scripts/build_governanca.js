@@ -117,7 +117,7 @@ const children = [
   new Paragraph({ spacing: { after: 480 }, children: [new TextRun({ text: "do pequeno produtor direto para o prato da escola", size: 24, color: C.gray })] }),
   new Paragraph({ spacing: { after: 120 }, children: [new TextRun({ text: "RELATÓRIO DE GOVERNANÇA, ÉTICA E SEGURANÇA DE DADOS", font: HEAD, size: 32, color: C.olive })] }),
   p("Disciplina: Data Ethics Governance  ·  Tecnologia em Data Science, AI, Analytics, Cloud & Data Platforms  ·  Turma 2TSCPW", { run: { color: C.gray, size: 18 } }),
-  p("Integrantes (ordem alfabética): Elton Vinicios Almeida de Oliveira (RM 562187, responsável) · Emerson dos Santos Silva (RM 562033) · Kelvin Douglas Ribeiro Rabelo (RM 561538)", { run: { color: C.gray, size: 18 } }),
+  p("Equipe Raiz Digital · Integrantes (ordem alfabética): Elton Vinicios Almeida de Oliveira (RM 562187, responsável) · Emerson dos Santos Silva (RM 562033) · Kelvin Douglas Ribeiro Rabelo (RM 561538)", { run: { color: C.gray, size: 18 } }),
   brk(),
   new Paragraph({ spacing: { after: 200 }, children: [new TextRun({ text: "SUMÁRIO", font: HEAD, size: 28 })] }),
   new TableOfContents("Sumário", { hyperlink: true, headingStyleRange: "1-2" }),
@@ -265,4 +265,4 @@ const doc = new Document({
   }],
 });
 
-Packer.toBuffer(doc).then((buf) => { fs.writeFileSync("GS_2TSCPW_Governanca_MerendaDaRoca.docx", buf); console.log("ok"); });
+Packer.toBuffer(doc).then((buf) => { fs.writeFileSync("GS_2TSCPW_Governanca_MerendaDaRoca_RaizDigital.docx", buf); console.log("ok"); });

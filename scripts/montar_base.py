@@ -153,8 +153,8 @@ fontes = pd.DataFrame([
 ], columns=["fonte", "link", "periodo", "observacao"])
 
 out = sys.argv[3] if len(sys.argv) > 3 else "."
-base.to_csv(f"{out}/GS_2TSCPW_DataViz_MerendaDaRoca.csv", sep=";", decimal=",", index=False, encoding="utf-8-sig")
-with pd.ExcelWriter(f"{out}/GS_2TSCPW_DataViz_MerendaDaRoca.xlsx") as xw:
+base.to_csv(f"{out}/GS_2TSCPW_DataViz_MerendaDaRoca_RaizDigital.csv", sep=";", decimal=",", index=False, encoding="utf-8-sig")
+with pd.ExcelWriter(f"{out}/GS_2TSCPW_DataViz_MerendaDaRoca_RaizDigital.xlsx") as xw:
     base.to_excel(xw, "dados", index=False)
     r_ano.to_excel(xw, "resumo_ano_regiao", index=False)
     r_uf.to_excel(xw, "resumo_uf_2022", index=False)

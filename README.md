@@ -2,7 +2,9 @@
 
 **Do pequeno produtor direto para o prato da escola.**
 
-Projeto da **Global Solution 2026.2 – CitizenTech** (FIAP · Tecnologia em Data Science, AI, Analytics, Cloud & Data Platforms · turma **2TSCPW**).
+Projeto da equipe **Raiz Digital** para a **Global Solution 2026.2 – CitizenTech** (FIAP · Tecnologia em Data Science, AI, Analytics, Cloud & Data Platforms · turma **2TSCPW**).
+
+**Dashboard interativo:** https://kelvindouglasr.github.io/merenda-da-roca/
 
 ## O problema
 
@@ -25,7 +27,8 @@ Uma plataforma que conecta o produtor rural à merenda escolar:
 | `entregas/` | Pitch (PDF e PPTX), relatório de Governança, Ética e Segurança (PDF e DOCX) e `linkvideo.txt` |
 | `dados/` | Base do Data Viz: compras da agricultura familiar no PNAE 2011–2022 (FNDE) + população do Censo 2022 (IBGE). CSV com `;` e vírgula decimal; o XLSX traz resumos e dicionário |
 | `arquitetura/` | Diagrama de arquitetura em draw.io (editável) e PNG |
-| `scripts/` | Código que gera a base, o diagrama, o pitch e o relatório |
+| `docs/` | Dashboard interativo (GitHub Pages), com filtros por ano, região, UF, porte e meta |
+| `scripts/` | Código que gera a base, o diagrama, o pitch, o relatório e os dados do dashboard |
 
 ## Fontes de dados
 
@@ -50,7 +53,7 @@ node build_governanca.js   # precisa de arquitetura_merenda_da_roca.png na mesma
 node build.js              # usa apply_theme.js, da skill de PPTX usada para gerar o deck (variável PPTX_SKILL)
 ```
 
-## Equipe
+## Equipe Raiz Digital
 
 | Integrante | RM |
 |---|---|

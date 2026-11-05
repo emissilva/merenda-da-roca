@@ -105,6 +105,9 @@ async function icon(Comp, color, size = 256) {
 
   // ======================= 1. CAPA =======================
   pres.addSection({ title: "Abertura" });
+  const s0 = pres.addSlide({ masterName: "COVER", sectionTitle: "Abertura" });
+  s0.addImage({ path: "template_capa.png", x: 0, y: 0, w: 10, h: 5.625, altText: "Capa oficial do template FIAP Global Solution 2026.2" });
+  T(s0, "MERENDA DA ROÇA  ·  EQUIPE RAIZ DIGITAL  ·  TURMA 2TSCPW", { x: 0.6, y: 2.6, w: 8.5, h: 0.4, fontSize: 13, bold: true, color: W, charSpacing: 2 });
   let s = pres.addSlide({ masterName: "COVER", sectionTitle: "Abertura" });
   mosaic(s, 6.1, 0, 8, 12, 0.4875,
     [0,1,0,2,1,0,2,0, 1,0,2,1,0,1,0,2, 0,2,1,0,2,0,1,1, 2,1,0,1,0,2,1,0, 0,1,2,0,1,1,0,2, 1,0,1,2,0,2,1,0],
@@ -130,7 +133,7 @@ async function icon(Comp, color, size = 256) {
   T(s, "MERENDA DA ROÇA", { x: 0.6, y: 3.15, w: 3.2, h: 0.4, fontFace: "Century Gothic", fontSize: 18, align: "center", color: K });
   T(s, "do campo para a escola", { x: 0.6, y: 3.55, w: 3.2, h: 0.3, fontSize: 10, align: "center", color: G });
   pill(s, "Turma 2TSCPW", 1.5, 4.1, 1.4, false);
-  T(s, "INTEGRANTES (ORDEM ALFABÉTICA)", { x: 4.3, y: 1.45, w: 5.2, h: 0.3, fontSize: 10, bold: true, color: OL });
+  T(s, "EQUIPE RAIZ DIGITAL  ·  INTEGRANTES (ORDEM ALFABÉTICA)", { x: 4.3, y: 1.45, w: 5.2, h: 0.3, fontSize: 10, bold: true, color: OL });
   const membros = [
     ["Elton Vinicios Almeida de Oliveira", "RM 562187", "Aluno responsável"],
     ["Emerson dos Santos Silva", "RM 562033", ""],
@@ -289,6 +292,43 @@ async function icon(Comp, color, size = 256) {
     { text: "produtor ouve oportunidades e preço de referência; prefeitura vê % da meta, oferta disponível e sugestão de cardápio.", options: { color: G } },
   ], { x: 0.7, y: 3.88, w: 8.6, h: 0.8, fontSize: 10, valign: "middle" });
 
+  // ======================= 7b. REQUISITOS E ESCOPO =======================
+  s = pres.addSlide({ masterName: "LIGHT", sectionTitle: "Solução" });
+  kicker(s, "Requisitos e escopo", OL);
+  s.addText("O QUE A PLATAFORMA PRECISA FAZER", { placeholder: "title" });
+  const reqCol = (x, w, titulo, cor, itens) => {
+    card(s, x, 1.4, w, 3.4, false);
+    T(s, titulo, { x: x + 0.15, y: 1.5, w: w - 0.3, h: 0.28, fontSize: 9.5, bold: true, color: cor });
+    T(s, itens.flatMap((it, j) => [{ text: it[0] + "  ", options: { bold: true, color: cor } },
+      { text: it[1], options: { color: K, breakLine: j < itens.length - 1 } }]),
+      { x: x + 0.15, y: 1.85, w: w - 0.3, h: 2.85, fontSize: 8.5, valign: "top", paraSpaceAfter: 5 });
+  };
+  reqCol(0.5, 3.3, "REQUISITOS FUNCIONAIS", OL, [
+    ["RF01", "Receber a oferta do produtor por áudio (WhatsApp) ou ligação e transcrever"],
+    ["RF02", "Avisar o produtor sobre chamadas públicas perto dele"],
+    ["RF03", "Juntar ofertas de vizinhos para fechar o volume pedido (match)"],
+    ["RF04", "Mostrar à prefeitura o % da meta e a oferta da região"],
+    ["RF05", "Sugerir o cardápio pela safra prevista"],
+    ["RF06", "Agendar a coleta e calcular a rota compartilhada"]]);
+  reqCol(3.95, 2.75, "REQUISITOS NÃO FUNCIONAIS", OR, [
+    ["RNF01", "Funcionar em celular simples: voz, SMS e ligação"],
+    ["RNF02", "LGPD: consentimento por áudio e CPF pseudonimizado"],
+    ["RNF03", "Responder ao produtor em menos de 1 minuto"],
+    ["RNF04", "Disponível 99,5% do tempo, com fila offline"],
+    ["RNF05", "Toda transcrição é lida de volta para confirmar"]]);
+  card(s, 6.85, 1.4, 2.65, 3.4, false);
+  T(s, "ESCOPO", { x: 7.0, y: 1.5, w: 2.4, h: 0.28, fontSize: 9.5, bold: true, color: K });
+  T(s, [
+    { text: "MVP · piloto de 6 meses", options: { bold: true, color: OL, breakLine: true } },
+    { text: "10 municípios do Piauí, o estado mais crítico. RF01 a RF04.", options: { color: K, breakLine: true } },
+    { text: " ", options: { breakLine: true } },
+    { text: "Depois do piloto", options: { bold: true, color: OR, breakLine: true } },
+    { text: "RF05 e RF06; expansão por consórcios de municípios; integração com a prestação de contas do FNDE.", options: { color: K, breakLine: true } },
+    { text: " ", options: { breakLine: true } },
+    { text: "Fora do escopo", options: { bold: true, color: G, breakLine: true } },
+    { text: "Pagamento ao produtor e crédito rural.", options: { color: K } },
+  ], { x: 7.0, y: 1.85, w: 2.4, h: 2.85, fontSize: 8.5, valign: "top" });
+
   // ======================= 8. BENEFÍCIOS E INDICADORES =======================
   s = pres.addSlide({ masterName: "LIGHT", sectionTitle: "Solução" });
   kicker(s, "Benefícios, impactos e indicadores", OL);
@@ -427,6 +467,36 @@ async function icon(Comp, color, size = 256) {
   T(s, [{ text: "Prefeitura: ", options: { bold: true, color: K } }, { text: "meta, oferta da região e cardápio pela safra. Números do protótipo são ilustrativos.", options: { color: G } }],
     { x: px, y: 4.88, w: 5.9, h: 0.3, fontSize: 8 });
 
+  // ======================= 11b. TELAS DO FLUXO =======================
+  s = pres.addSlide({ masterName: "LIGHT", sectionTitle: "Tecnologia" });
+  kicker(s, "Protótipo da solução  ·  Fluxo completo", OL);
+  s.addText("DO AVISO À COLETA, EM 4 TELAS", { placeholder: "title" });
+  const telas = [
+    ["1 · AVISO", "075E54", [[false, "▶ ━━━━ 0:15  \"Seu Antônio, a prefeitura de Picos vai comprar macaxeira em março. Você tem?\""], [false, "1 · Tenho\n2 · Não tenho"]], "Chamada pública vira áudio para quem planta perto."],
+    ["2 · OFERTA POR VOZ", "075E54", [[true, "▶ ━━━ 0:07  \"Tenho uns 120 quilo.\""], [false, "Entendi: 120 kg de macaxeira em março. Aperte 1 para confirmar."]], "IA transcreve e lê de volta para confirmar."],
+    ["3 · GRUPO FORMADO", "075E54", [[false, "Você entrou num grupo com 2 vizinhos: 300 kg no total."], [false, "Coleta: 12/03, 7h, na associação.\nValor previsto: R$ 456."]], "O match fecha o volume que ele sozinho não teria."],
+    ["4 · SEM INTERNET", "4A4A4A", [[false, "SMS · MERENDA DA ROÇA\nColeta confirmada 12/03 7h. Resp. 1 p/ OK"], [true, "1"]], "Celular simples: SMS e ligação (URA)."],
+  ];
+  telas.forEach((t, i) => {
+    const x = 0.55 + i * 2.3, y = 1.35, w = 1.75, h = 3.0;
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w, h, rectRadius: 0.16, fill: { color: HEX.black }, line: { type: "none" } });
+    s.addShape(pres.shapes.RECTANGLE, { x: x + 0.08, y: y + 0.16, w: w - 0.16, h: h - 0.32, fill: { color: i === 3 ? "F2F2F2" : "ECE5DD" }, line: { type: "none" } });
+    s.addShape(pres.shapes.RECTANGLE, { x: x + 0.08, y: y + 0.16, w: w - 0.16, h: 0.3, fill: { color: t[1] }, line: { type: "none" } });
+    T(s, i === 3 ? "Mensagens" : "Merenda da Roça", { x: x + 0.15, y: y + 0.16, w: w - 0.3, h: 0.3, fontSize: 7.5, bold: true, color: W, valign: "middle" });
+    let by = y + 0.55;
+    t[2].forEach((bb) => {
+      const bh = bb[1].length > 55 ? 0.95 : bb[1].length > 20 ? 0.6 : 0.32, bw = bb[0] ? (bb[1].length > 20 ? 1.3 : 0.5) : w - 0.3;
+      const bx = bb[0] ? x + w - 0.13 - bw : x + 0.13;
+      s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: bx, y: by, w: bw, h: bh, rectRadius: 0.05, fill: { color: bb[0] ? "DCF8C6" : HEX.white }, line: { type: "none" } });
+      T(s, bb[1], { x: bx + 0.05, y: by + 0.03, w: bw - 0.1, h: bh - 0.06, fontSize: 7, color: K, valign: "top" });
+      by += bh + 0.1;
+    });
+    if (i < 3) s.addShape(pres.shapes.LINE, { x: x + w + 0.1, y: y + h / 2, w: 0.35, h: 0, line: { color: HEX.orange, width: 1.5, endArrowType: "triangle" } });
+    T(s, t[0], { x, y: 4.42, w: 2.1, h: 0.22, fontSize: 9, bold: true, color: OR });
+    T(s, t[3], { x, y: 4.64, w: 2.1, h: 0.4, fontSize: 8, color: G, valign: "top" });
+  });
+  s.addNotes("Telas de baixa fidelidade; valores ilustrativos. O painel da prefeitura está no slide anterior e a versão interativa do dashboard em https://kelvindouglasr.github.io/merenda-da-roca/");
+
   // ======================= 12. USO RESPONSÁVEL =======================
   s = pres.addSlide({ masterName: "DARK", sectionTitle: "Tecnologia" });
   kicker(s, "Uso responsável dos dados", OR);
@@ -444,6 +514,27 @@ async function icon(Comp, color, size = 256) {
     T(s, r[2], { x: x + 0.25, y: 2.78, w: 2.45, h: 1.9, fontSize: 9.5, color: C.accent4, valign: "top" });
   }
 
+  // ======================= 12b. DISCIPLINAS =======================
+  s = pres.addSlide({ masterName: "LIGHT", sectionTitle: "Tecnologia" });
+  kicker(s, "Aprendizados do ano aplicados", OL);
+  s.addText("O QUE CADA DISCIPLINA TROUXE AO PROJETO", { placeholder: "title" });
+  const disc = [
+    ["Data Protection & Ingestion Solutions", "Ingestão com Data Factory e Functions; LGPD, criptografia e pseudonimização do CPF"],
+    ["Data Warehousing & Advanced Data Integration", "Data Lake bronze/prata/ouro; integração FNDE + IBGE pelo código do município"],
+    ["Artificial Intelligence & Deep Learning", "Reconhecimento de fala (Whisper) e voz sintetizada para o produtor"],
+    ["Machine Learning & AI for Data Science", "Previsão de safra e match entre oferta e demanda; otimização de rotas"],
+    ["Cloud Solutions & Scalable Infrastructure", "Arquitetura Azure gerenciada, que escala por consórcio de municípios"],
+    ["BI, Analytics & Data Visualization", "Dashboard com dados reais do FNDE, filtros e insights"],
+    ["Data Ethics & Governance", "Glossário, dicionário de dados, RBAC e análise de vieses"],
+  ];
+  disc.forEach((d, i) => {
+    const col = i % 2, row = Math.floor(i / 2), x = 0.5 + col * 4.55, y = 1.4 + row * 0.85;
+    card(s, x, y, 4.45, 0.75, false);
+    s.addShape(pres.shapes.RECTANGLE, { x: x + 0.15, y: y + 0.27, w: 0.2, h: 0.2, fill: { color: i % 2 ? HEX.orange : HEX.olive }, line: { type: "none" } });
+    T(s, d[0], { x: x + 0.5, y: y + 0.08, w: 3.85, h: 0.27, fontSize: 9.5, bold: true, color: K });
+    T(s, d[1], { x: x + 0.5, y: y + 0.36, w: 3.85, h: 0.34, fontSize: 8.5, color: G, valign: "top" });
+  });
+
   // ======================= 13. DATAVIZ — DADOS =======================
   pres.addSection({ title: "Data Visualization" });
   s = pres.addSlide({ masterName: "LIGHT", sectionTitle: "Data Visualization" });
@@ -451,17 +542,20 @@ async function icon(Comp, color, size = 256) {
   s.addText("DADOS REAIS E PÚBLICOS", { placeholder: "title" });
   const H = (t) => ({ text: t, options: { bold: true, color: HEX.white, fill: { color: HEX.black } } });
   s.addTable([
-    [H("Fonte"), H("Período"), H("Principais variáveis"), H("Por que usar")],
-    ["FNDE: Aquisições da agricultura familiar no PNAE (SigPC)", "2011–2022", "UF, código IBGE, entidade executora, valor transferido, valor comprado da AF, %", "Única base oficial que mede a meta de 30%/45% por município"],
-    ["IBGE: Censo 2022, população residente (SIDRA 4709)", "2022", "Código IBGE, município, população", "Classificar o porte e mostrar quem é mais afetado"],
-    ["IBGE: Censo Agropecuário 2017", "2017", "Estabelecimentos da agricultura familiar", "Contexto: mostra que a oferta existe"],
-  ], { x: 0.5, y: 1.4, w: 9, colW: [2.6, 0.9, 3.0, 2.5], fontSize: 8.5, fontFace: "Arial", color: HEX.black,
+    [H("Fonte"), H("Período"), H("Principais variáveis"), H("Por que usar"), H("Link")],
+    ["FNDE: Aquisições da agricultura familiar no PNAE (SigPC)", "2011–2022", "UF, código IBGE, entidade executora, valor transferido, valor comprado da AF, %", "Única base oficial que mede a meta de 30%/45% por município",
+      { text: "gov.br/fnde › PNAE › Consultas › Dados da Agricultura Familiar", options: { color: HEX.navy, hyperlink: { url: "https://www.gov.br/fnde/pt-br/acesso-a-informacao/acoes-e-programas/programas/pnae/consultas/pnae-dados-da-agricultura-familiar" } } }],
+    ["IBGE: Censo 2022, população residente (SIDRA 4709)", "2022", "Código IBGE, município, população", "Classificar o porte e mostrar quem é mais afetado",
+      { text: "apisidra.ibge.gov.br/values/t/4709", options: { color: HEX.navy, hyperlink: { url: "https://apisidra.ibge.gov.br/values/t/4709/n6/all/v/93/p/2022" } } }],
+    ["IBGE: Censo Agropecuário 2017", "2017", "Estabelecimentos da agricultura familiar", "Contexto: mostra que a oferta existe",
+      { text: "sidra.ibge.gov.br (Censo Agro 2017)", options: { color: HEX.navy, hyperlink: { url: "https://sidra.ibge.gov.br/pesquisa/censo-agropecuario/censo-agropecuario-2017" } } }],
+  ], { x: 0.5, y: 1.4, w: 9, colW: [2.05, 0.75, 2.4, 2.0, 1.8], fontSize: 8, fontFace: "Arial", color: HEX.black,
     fill: { color: HEX.white }, border: { type: "solid", pt: 0.5, color: HEX.light }, rowH: 0.42, valign: "middle" });
   T(s, [
     { text: "Tratamento realizado: ", options: { bold: true, color: K } },
     { text: "12 planilhas anuais do FNDE em formatos diferentes unidas em uma base (65.071 linhas); cabeçalhos padronizados em snake_case; % de 2018–2019 convertido de 0–100 para 0–1; código IBGE de 2011–2012 recuperado pelo nome do município; % AF recalculado (comprado ÷ transferido); registros sem repasse ou com compra maior que o repasse marcados como inconsistentes e excluídos; porte do município pela população 2022; faixas da meta (0%, <30%, 30–45%, ≥45%).", options: { color: G } },
-  ], { x: 0.5, y: 3.25, w: 9, h: 1.45, fontSize: 9.5, valign: "top" });
-  source(s, "Links: gov.br/fnde (PNAE · Consultas · Dados da Agricultura Familiar) · apisidra.ibge.gov.br/values/t/4709 · Arquivo anexo: GS_2TSCPW_DataViz_MerendaDaRoca.csv (+ .xlsx com resumos e dicionário).", false);
+  ], { x: 0.5, y: 3.5, w: 9, h: 1.3, fontSize: 9.5, valign: "top" });
+  source(s, "Arquivo anexo à entrega: GS_2TSCPW_DataViz_MerendaDaRoca_RaizDigital.csv (65.071 linhas). Versão .xlsx com resumos e dicionário no repositório do projeto.", false);
 
   // ======================= 14. DATAVIZ — DASHBOARD =======================
   s = pres.addSlide({ masterName: "LIGHT", sectionTitle: "Data Visualization" });
@@ -505,7 +599,31 @@ async function icon(Comp, color, size = 256) {
     { ...axis, x: bx + 7.35, y: byy + 0.5, w: 1.55, h: 2.95, barDir: "col", chartColors: [HEX.olive],
       showTitle: true, title: "QUEM · % abaixo de 30% por porte", showValue: true, dataLabelPosition: "outEnd", dataLabelFormatCode: "0",
       valAxisHidden: true, valGridLine: { style: "none" }, catGridLine: { style: "none" }, valAxisMaxVal: 55, showLegend: false });
-  s.addNotes("Dados: FNDE/SigPC (preliminares) + IBGE Censo 2022. Cartões, ranking e porte: prefeituras do Nordeste em 2022 com dados válidos (1.670). Linha: todas as entidades executoras com dados válidos. Metrópoles (4 municípios) omitidas do gráfico de porte por amostra pequena. Um mapa coroplético por município entra na versão em Power BI.");
+  s.addNotes("Dados: FNDE/SigPC (preliminares) + IBGE Censo 2022. Cartões, ranking e porte: prefeituras do Nordeste em 2022 com dados válidos (1.670). Linha: todas as entidades executoras com dados válidos. Metrópoles (4 municípios) omitidas do gráfico de porte por amostra pequena. Versão interativa: https://kelvindouglasr.github.io/merenda-da-roca/");
+  T(s, [{ text: "Versão interativa (filtros por ano, região, UF, porte e meta): ", options: { color: G } },
+    { text: "https://kelvindouglasr.github.io/merenda-da-roca/", options: { color: HEX.navy, bold: true, hyperlink: { url: "https://kelvindouglasr.github.io/merenda-da-roca/" } } }],
+    { x: 0.5, y: 4.9, w: 9, h: 0.25, fontSize: 8.5 });
+
+  // ======================= 14b. FICHA DOS GRÁFICOS =======================
+  s = pres.addSlide({ masterName: "LIGHT", sectionTitle: "Data Visualization" });
+  kicker(s, "Data Visualization  ·  Design da visualização", OR);
+  s.addText("O QUE CADA GRÁFICO RESPONDE", { placeholder: "title" });
+  const HF = (t) => ({ text: t, options: { bold: true, color: HEX.white, fill: { color: HEX.black } } });
+  const B = (t) => ({ text: t, options: { bold: true } });
+  s.addTable([
+    [HF("Gráfico"), HF("Informação"), HF("Variáveis"), HF("Tipo e justificativa")],
+    [B("Cartões"), "Tamanho do problema", "perc_af agregado; % de prefeituras abaixo da meta; R$ que faltam (0,45 × repasse − comprado)", "Número grande: leitura imediata, para gestor e banca"],
+    [B("Linha"), "Como evoluiu", "ano; perc_af da seleção × Brasil; linhas das metas de 30% e 45%", "Evolução temporal: mostra a tendência e a queda na pandemia (2020–21)"],
+    [B("Barras horizontais"), "Onde é mais crítico", "uf; % de prefeituras abaixo da meta", "Ranking ordenado: compara estados de uma vez"],
+    [B("Colunas"), "Quem é mais afetado", "porte_municipio (Censo 2022); % abaixo da meta", "Comparação entre faixas ordenadas de porte"],
+    [B("Rosca"), "Distribuição pelas faixas", "faixa_meta: 0%, < 30%, 30–45%, ≥ 45%", "Partes de um todo, com só 4 categorias"],
+    [B("Tabela com busca"), "Situação de cada prefeitura", "municipio, uf, porte, repasse, comprado, perc_af", "Detalhe: o gestor encontra o próprio município"],
+  ], { x: 0.5, y: 1.35, w: 9, colW: [1.45, 1.75, 3.3, 2.5], fontSize: 8, fontFace: "Arial", color: HEX.black,
+    fill: { color: HEX.white }, border: { type: "solid", pt: 0.5, color: HEX.light }, rowH: 0.36, valign: "middle" });
+  T(s, [{ text: "Filtros previstos: ", options: { bold: true, color: K } },
+    { text: "ano (2011–2022), região, UF, porte do município e meta usada (30% ou 45%). Todos funcionam na versão interativa: ", options: { color: G } },
+    { text: "https://kelvindouglasr.github.io/merenda-da-roca/", options: { color: HEX.navy, bold: true, hyperlink: { url: "https://kelvindouglasr.github.io/merenda-da-roca/" } } }],
+    { x: 0.5, y: 4.5, w: 9, h: 0.45, fontSize: 9, valign: "top" });
 
   // ======================= 15. DATAVIZ — INSIGHTS =======================
   s = pres.addSlide({ masterName: "DARK", sectionTitle: "Data Visualization" });
@@ -521,7 +639,7 @@ async function icon(Comp, color, size = 256) {
     T(s, it[0], { x: 0.5, y, w: 2.2, h: 0.9, fontFace: "Century Gothic", fontSize: 24, bold: true, color: it[2], valign: "middle" });
     T(s, it[1], { x: 2.8, y, w: 6.7, h: 0.9, fontSize: 11, color: W, valign: "middle" });
   });
-  source(s, "Fonte: cálculo do grupo sobre FNDE/SigPC 2022 (dados preliminares) e IBGE Censo 2022; prefeituras do Nordeste com dados válidos. Base anexa: GS_2TSCPW_DataViz_MerendaDaRoca.csv.", true);
+  source(s, "Fonte: cálculo do grupo sobre FNDE/SigPC 2022 (dados preliminares) e IBGE Censo 2022; prefeituras do Nordeste com dados válidos. Base anexa: GS_2TSCPW_DataViz_MerendaDaRoca_RaizDigital.csv.", true);
 
   // ======================= 16. ENCERRAMENTO =======================
   pres.addSection({ title: "Encerramento" });
@@ -531,9 +649,11 @@ async function icon(Comp, color, size = 256) {
   T(s, "A PRÓXIMA REFEIÇÃO DA ESCOLA PODE ESTAR PLANTADA DO LADO DELA.", { x: 3.4, y: 1.95, w: 6.2, h: 1.2, fontFace: "Century Gothic", fontSize: 20, color: W, valign: "top" });
   T(s, "LINK DO VÍDEO PITCH", { x: 3.4, y: 3.5, w: 6, h: 0.3, fontSize: 10, bold: true, color: OR, charSpacing: 2 });
   T(s, "https://youtu.be/  (inserir link público do YouTube)", { x: 3.4, y: 3.85, w: 6, h: 0.35, fontSize: 14, color: W });
-  T(s, "Merenda da Roça  ·  Global Solution 2026.2  ·  CitizenTech", { x: 3.4, y: 4.95, w: 6, h: 0.25, fontSize: 9, color: C.accent4 });
+  T(s, "DASHBOARD INTERATIVO", { x: 3.4, y: 4.3, w: 6, h: 0.25, fontSize: 9, bold: true, color: OL, charSpacing: 2 });
+  T(s, "https://kelvindouglasr.github.io/merenda-da-roca/", { x: 3.4, y: 4.55, w: 6, h: 0.3, fontSize: 11, color: W, hyperlink: { url: "https://kelvindouglasr.github.io/merenda-da-roca/" } });
+  T(s, "Equipe Raiz Digital  ·  Turma 2TSCPW  ·  Global Solution 2026.2  ·  CitizenTech", { x: 3.4, y: 5.0, w: 6, h: 0.25, fontSize: 9, color: C.accent4 });
 
-  const out = "GS_2TSCPW_Pitch_MerendaDaRoca.pptx";
+  const out = "GS_2TSCPW_Pitch_MerendaDaRoca_RaizDigital.pptx";
   await pres.writeFile({ fileName: out });
   await applyTheme(out, THEME);
   console.log("ok", out);
